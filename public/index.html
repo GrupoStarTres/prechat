@@ -130,11 +130,13 @@
         </div>
     </div>
 
-    <div id="typing" class="typing">Escribiendo...</div>
+    <!-- Cambiado el id de typing a typing-indicator -->
+    <div id="typing-indicator" class="typing">Escribiendo...</div>
 
     <form class="input-area" id="chat-form">
         <input type="text" id="user-input" placeholder="Pregunta algo..." stroke-width="2">
-        <button type="submit">Enviar</button>
+        <!-- Agregado el id send-button al botón -->
+        <button id="send-button" type="submit">Enviar</button>
     </form>
 
     <script src="chat.js"></script>
