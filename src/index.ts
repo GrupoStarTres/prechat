@@ -1,104 +1,106 @@
 /**
- * LLM Chat Application Template
- *
- * A simple chat application using Cloudflare Workers AI.
- * This template demonstrates how to implement an LLM-powered chat interface with
- * streaming responses using Server-Sent Events (SSE).
- *
- * @license MIT
+ * LLM Chat Application Template - Modificado para bgftech.shop
  */
 import { Env, ChatMessage } from "./types";
 
-// Model ID for Workers AI model
-// https://developers.cloudflare.com/workers-ai/models/
 const MODEL_ID = "@cf/meta/llama-3.1-8b-instruct-fp8";
 
-// Default system prompt
-const SYSTEM_PROMPT =
-	"You are a helpful, friendly assistant. Provide concise and accurate responses.";
+// System prompt personalizado
+const SYSTEM_PROMPT = `Eres un asistente virtual de la tienda bgftech.shop, especializada en productos de diagnóstico automotriz y electrónica. Tu objetivo es ayudar a los clientes proporcionando información sobre los productos disponibles, precios y detalles técnicos. Responde de manera amigable y concisa en español. Si no sabes la respuesta, indícalo amablemente y sugiere consultar directamente en la tienda.`;
 
-export default {
-	/**
-	 * Main request handler for the Worker
-	 */
-	async fetch(
-		request: Request,
-		env: Env,
-		ctx: ExecutionContext,
-	): Promise<Response> {
-		const url = new URL(request.url);
-
-		// Handle static assets (frontend)
-		if (url.pathname === "/" || !url.pathname.startsWith("/api/")) {
-			return env.ASSETS.fetch(request);
-		}
-
-		// API Routes
-		if (url.pathname === "/api/chat") {
-			// Handle POST requests for chat
-			if (request.method === "POST") {
-				return handleChatRequest(request, env);
-			}
-
-			// Method not allowed for other request types
-			return new Response("Method not allowed", { status: 405 });
-		}
-
-		// Handle 404 for unmatched routes
-		return new Response("Not found", { status: 404 });
-	},
-} satisfies ExportedHandler<Env>;
+const STORE_URL = "https://bgftech.shop/tienda/";
 
 /**
- * Handles chat API requests
+ * Obtiene y procesa el contenido de la tienda
  */
-async function handleChatRequest(
-	request: Request,
-	env: Env,
-): Promise<Response> {
-	try {
-		// Parse JSON request body
-		const { messages = [] } = (await request.json()) as {
-			messages: ChatMessage[];
-		};
+async function fetchStoreData(): Promise<string | null> {
+  try {
+    const response = await fetch(STORE_URL);
+    if (!response.ok) return null;
+    const html = await response.text();
+    
+    // Limpieza básica de HTML
+    const textContent = html
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    
+    // Limitar a 3000 caracteres
+    const maxLength = 3000;
+    return textContent.length > maxLength
+      ? textContent.substring(0, maxLength) + "..."
+      : textContent;
+  } catch (error) {
+    console.error("Error en fetchStoreData:", error);
+    return null;
+  }
+}
 
-		// Add system prompt if not present
-		if (!messages.some((msg) => msg.role === "system")) {
-			messages.unshift({ role: "system", content: SYSTEM_PROMPT });
-		}
+export default {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+    const url = new URL(request.url);
 
-		const stream = await env.AI.run(
-			MODEL_ID,
-			{
-				messages,
-				max_tokens: 1024,
-				stream: true,
-			},
-			{
-				// Uncomment to use AI Gateway
-				// gateway: {
-				//   id: "YOUR_GATEWAY_ID", // Replace with your AI Gateway ID
-				//   skipCache: false,      // Set to true to bypass cache
-				//   cacheTtl: 3600,        // Cache time-to-live in seconds
-				// },
-			},
-		);
+    // Servir frontend estático
+    if (url.pathname === "/" || !url.pathname.startsWith("/api/")) {
+      return env.ASSETS.fetch(request);
+    }
 
-		return new Response(stream, {
-			headers: {
-				"content-type": "text/event-stream; charset=utf-8",
-				"cache-control": "no-cache",
-				connection: "keep-alive",
-			},
-		});
-	} catch (error) {
-		console.error("Error processing chat request:", error);
-		return new Response(
-			JSON.stringify({ error: "Failed to process request" }),
-			{
-				status: 500,
-				headers: { "content-type": "application/json" },
-			},
-		);
-	}
+    // API de chat
+    if (url.pathname === "/api/chat") {
+      if (request.method === "POST") {
+        return handleChatRequest(request, env);
+      }
+      return new Response("Method not allowed", { status: 405 });
+    }
+
+    return new Response("Not found", { status: 404 });
+  },
+} satisfies ExportedHandler<Env>;
+
+async function handleChatRequest(request: Request, env: Env): Promise<Response> {
+  try {
+    const { messages = [] } = (await request.json()) as { messages: ChatMessage[] };
+
+    // Obtener datos actualizados de la tienda
+    const storeData = await fetchStoreData();
+
+    // Construir la lista final de mensajes
+    const finalMessages: ChatMessage[] = [];
+
+    if (storeData) {
+      finalMessages.push({
+        role: "system",
+        content: `Información actual de la tienda bgftech.shop:\n${storeData}`
+      });
+    }
+
+    // Añadir system prompt si no existe
+    if (!messages.some(msg => msg.role === "system")) {
+      finalMessages.push({ role: "system", content: SYSTEM_PROMPT });
+    }
+
+    // Añadir el resto de la conversación
+    finalMessages.push(...messages);
+
+    // Llamar al modelo con streaming
+    const stream = await env.AI.run(MODEL_ID, {
+      messages: finalMessages,
+      max_tokens: 1024,
+      stream: true,
+    });
+
+    return new Response(stream, {
+      headers: {
+        "content-type": "text/event-stream; charset=utf-8",
+        "cache-control": "no-cache",
+        connection: "keep-alive",
+      },
+    });
+  } catch (error) {
+    console.error("Error en chat:", error);
+    return new Response(
+      JSON.stringify({ error: "Failed to process request" }),
+      { status: 500, headers: { "content-type": "application/json" } }
+    );
+  }
 }
