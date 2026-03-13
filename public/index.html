@@ -1,160 +1,233 @@
  <!doctype html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Primaria Salud | Emergencias y Triage Médico</title>
-    <style>
-        :root {
-            --ps-blue: #2154a3;
-            --ps-green: #78b33b;
-            --ps-gray: #e7ecef;
-            --ps-dark: #234063;
-        }
-        html,body {
-            height: 100%;
-            margin: 0;
-            font-family: 'Montserrat', Arial, Helvetica, sans-serif;
-            background: var(--ps-gray);
-            color: var(--ps-dark);
-        }
-        .header {
-            background: var(--ps-blue);
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px 10px 12px 10px;
-        }
-        .logo {
-            height: 56px;
-            margin-bottom: 4px;
-        }
-        .title {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin: 0 0 4px 0;
-            letter-spacing: 1px;
-        }
-        .tagline {
-            font-size: 1.05rem;
-            color: var(--ps-green);
-        }
-        .banner-telemedicina {
-            background: var(--ps-green);
-            color: #fff;
-            text-align: center;
-            font-weight: bold;
-            letter-spacing: 2px;
-            padding: 8px 0;
-        }
-        .chat-container {
-            background: #fff;
-            max-width: 500px;
-            margin: 32px auto 0 auto;
-            display: flex;
-            flex-direction: column;
-            border-radius: 17px;
-            box-shadow: 0 4px 18px rgba(33,84,163,.11);
-            padding: 25px 18px 0 18px;
-            min-height: 350px;
-        }
-        .message {
-            border-radius: 12px;
-            margin: 4px 0;
-            padding: 12px;
-            max-width: 86%;
-            line-height: 1.5;
-            font-size: 1rem;
-            word-break: break-word;
-        }
-        .assistant {
-            background: #e1eeff;
-            color: var(--ps-dark);
-            align-self: flex-start;
-        }
-        .user {
-            background: var(--ps-blue);
-            color: #fff;
-            align-self: flex-end;
-        }
-        .input-area {
-            display: flex;
-            gap: 12px;
-            padding: 15px 0 20px 0;
-        }
-        input {
-            flex: 1;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid var(--ps-blue);
-            outline: none;
-            font-size: 1rem;
-        }
-        button#send-button {
-            background: var(--ps-green);
-            color: #fff;
-            border: none;
-            padding: 0 22px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 1rem;
-        }
-        .typing {
-            font-size: 0.98rem;
-            color: var(--ps-green);
-            margin-bottom: 6px;
-            display: none;
-        }
-        .footer {
-            background: #f6f6f6;
-            color: var(--ps-dark);
-            font-size: 0.93rem;
-            text-align: center;
-            padding: 16px 10px 10px 10px;
-            margin-top: 24px;
-            border-radius: 13px;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .footer strong {
-            color: var(--ps-blue);
-        }
-        @media (max-width: 600px) {
-            .chat-container { max-width: 98%; padding: 9px 2vw 0 2vw; }
-            .footer { max-width: 97vw; }
-            .header { padding: 11px 3px 8px 3px; }
-        }
-    </style>
-    <!-- Google Fonts (Montserrat) -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Primaria Salud | Telemedicina y Chat Médico</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap">
+  <style>
+    :root {
+      --ps-blue: #2154a3;
+      --ps-green: #78b33b;
+      --ps-light: #f7fafd;
+      --ps-gray: #e7ecef;
+      --ps-dark: #234063;
+      --ps-accent: #FFB200;
+      --radius: 18px;
+    }
+    html,body {
+      height: 100%;
+      margin: 0;
+      font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+      background: var(--ps-light);
+      color: var(--ps-dark);
+    }
+    .landing {
+      max-width: 530px;
+      margin: 36px auto 16px auto;
+      background: #fff;
+      padding: 32px 22px 26px 22px;
+      border-radius: var(--radius);
+      box-shadow: 0 6px 36px rgba(33,84,163,0.09);
+      text-align: center;
+    }
+    .logo-svg {
+      display: block;
+      margin: 0 auto 14px auto;
+      width: 72px;
+      height: 72px;
+    }
+    h1 {
+      font-size: 2.1em;
+      font-weight: 800;
+      margin: 0 0 13px 0;
+      color: var(--ps-blue);
+    }
+    .promo {
+      color: var(--ps-green);
+      font-weight: bold;
+      font-size: 1.13em;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+    .landing ul {
+      text-align: left;
+      padding: 0 0 0 17px;
+      margin: 20px 0 20px 10px;
+    }
+    .landing ul li {
+      font-size: 1.04em;
+      margin: 8px 0;
+      line-height: 1.54;
+    }
+    .demo {
+      background: var(--ps-accent);
+      color: #fff;
+      border-radius: 12px;
+      padding: 8px 10px;
+      font-size: 1.07em;
+      display: inline-block;
+      margin-top: 12px;
+      margin-bottom: 2px;
+      font-weight: bold;
+      letter-spacing: .5px;
+    }
+    .privacy-text {
+      color: var(--ps-dark);
+      font-size: .98em;
+      margin-top: 20px;
+      margin-bottom: 3px;
+    }
+    .tele-banner {
+      margin: 22px 0 13px 0;
+      background: linear-gradient(90deg, var(--ps-green) 0%, var(--ps-blue) 100%);
+      color: #fff;
+      border-radius: 10px;
+      padding: 6px 0;
+      font-weight: bold;
+      font-size: 1.07em;
+      box-shadow: 0 2px 8px rgba(33,84,163,.09);
+    }
+    .chat-container {
+      background: #fff;
+      max-width: 530px;
+      margin: 0 auto 40px auto;
+      display: flex;
+      flex-direction: column;
+      border-radius: var(--radius);
+      box-shadow: 0 4px 18px rgba(33,84,163,.065);
+      padding: 11px 10px 0 10px;
+    }
+    .message {
+      border-radius: 13px;
+      margin: 5px 0;
+      padding: 13px 15px;
+      max-width: 89%;
+      line-height: 1.5;
+      font-size: 1.01em;
+      word-break: break-word;
+    }
+    .assistant {
+      background: #e1eeff;
+      color: var(--ps-dark);
+      align-self: flex-start;
+    }
+    .user {
+      background: var(--ps-blue);
+      color: #fff;
+      align-self: flex-end;
+    }
+    .input-area {
+      display: flex;
+      gap: 12px;
+      padding: 14px 0 22px 0;
+    }
+    input {
+      flex: 1;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid var(--ps-blue);
+      outline: none;
+      font-size: 1em;
+    }
+    button#send-button {
+      background: var(--ps-green);
+      color: #fff;
+      border: none;
+      padding: 0 24px;
+      border-radius: 9px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1em;
+      box-shadow: 0 2px 6px rgba(120,179,59,0.04);
+      transition: background 0.18s;
+    }
+    button#send-button:hover {
+      background: #93ce51;
+    }
+    .typing {
+      font-size: .95em;
+      color: var(--ps-green);
+      margin-bottom: 2px;
+      display: none;
+      font-style: italic;
+    }
+    .footer {
+      max-width: 530px;
+      background: #f8f8f8;
+      color: var(--ps-dark);
+      font-size: .99em;
+      text-align: center;
+      padding: 12px 8px 8px 8px;
+      margin: 0 auto 24px auto;
+      border-radius: 9px;
+      margin-bottom: 2vw;
+    }
+    .footer strong { color: var(--ps-blue);}
+    @media (max-width: 700px) {
+      .landing, .footer, .chat-container { max-width: 99vw; padding-left: 2vw; padding-right: 2vw; }
+      .logo-svg { width: 60px; height: 60px;}
+    }
+  </style>
 </head>
 <body>
-    <div class="banner-telemedicina">PRÓXIMAMENTE: Servicio de Telemedicina</div>
-    <div class="header">
-        <img src="https://www.primariasalud.com.ar/web/images/logo.png" alt="Primaria Salud" class="logo" />
-        <div class="title">Emergencias & Triage Médico</div>
-        <span class="tagline">Orientación personalizada de salud <b>con IA</b></span>
+  <div class="landing">
+    <svg class="logo-svg" viewBox="0 0 108 108" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="54" cy="54" r="50" fill="#2154a3"/>
+      <rect x="44" y="23" width="20" height="63" rx="7" fill="#78b33b"/>
+      <rect x="23" y="44" width="63" height="20" rx="7" fill="#78b33b"/>
+      <circle cx="54" cy="54" r="19" fill="#fff" opacity=".95"/>
+      <circle cx="54" cy="54" r="12" fill="#78b33b" />
+    </svg>
+    <h1>Primaria Salud</h1>
+    <div class="promo">Sistema de chat bot entrenado por médicos para guiarte</div>
+    <div class="tele-banner">
+      Sistema de telemedicina para afiliados y pacientes particulares<br>
+      <small>¡Accedé con un solo click a un médico, sin instalar nada!</small>
     </div>
-    <div class="chat-container">
-        <div class="message assistant">
-            Bienvenido/a a <strong>Primaria Salud</strong>. Soy una IA entrenada por médicos para orientación inicial (triage). No reemplazo la consulta presencial. <br><b>Ante emergencia, llame al 107 o número local de emergencias.</b>
-        </div>
-        <div id="chat-messages"></div>
-        <div id="typing-indicator" class="typing">Escribiendo...</div>
-        <form class="input-area" id="chat-form" autocomplete="off">
-            <input type="text" id="user-input" placeholder="Describe tu síntoma o consulta..." autocomplete="off" />
-            <button id="send-button" type="submit">Enviar</button>
-        </form>
+    <ul>
+      <li>Atención segura para recetas digitales, certificados y consultas simples.</li>
+      <li>Recibí tus recetas o documentos a tu WhatsApp o correo electrónico automáticamente.</li>
+      <li>Consultas sobre dudas o indicaciones previo a estudios, procedimientos o síntomas.</li>
+      <li>Recordatorios, orientación y aviso si debés acudir personalmente a consulta médica.</li>
+      <li>
+        Chat especializado: Consultas gratis y orientación médica al instante.
+        Si corresponde, te derivamos en el momento con un médico online.
+      </li>
+      <li>
+        Privacidad total: Usamos solo nuestra web. 
+        <b>No necesitás descargar apps ni crear usuario ni contraseña.</b>
+      </li>
+      <li>
+        Pedí tu turno fácil: ingresá tu número de WhatsApp, solicitá el turno y recibís el enlace directo para tu consulta médica online.
+      </li>
+      <li>
+        La palabra final es de los médicos: usá el chat como guía inicial, ¡pero ante dudas o síntomas importantes, consultá!
+      </li>
+    </ul>
+    <div class="demo">Esto es un demo ilustrativo del proyecto de telemedicina presentado</div>
+    <div class="privacy-text">
+      Velocidad, seguridad y privacidad en tu atención. Comunicación digital automática por tu WhatsApp.<br>
+      <strong>Gestión de turnos y consultas rápidas.</strong>
     </div>
-    <div class="footer">
-        Chat orientativo con IA entrenada por médicos. Próximamente <strong>telemedicina</strong>. <br>
-        No constituye consulta médica presencial. <br>
-        <strong>Primaria Salud</strong> · 
-        <a href="http://www.primariasalud.com.ar/web/" target="_blank">www.primariasalud.com.ar</a>
+  </div>
+  <div class="chat-container">
+    <div class="message assistant">
+      Bienvenido/a a <b>Primaria Salud</b>.<br>
+      Consultá gratis con nuestro <b>asistente entrenado por médicos</b> para orientación inicial (triage). Si se necesita, te derivaremos a un médico online.<br>
+      <b>Ante emergencia, llamá al 107.</b>
     </div>
-    <script src="chat.js"></script>
+    <div id="chat-messages"></div>
+    <div id="typing-indicator" class="typing">Escribiendo...</div>
+    <form class="input-area" id="chat-form" autocomplete="off">
+      <input type="text" id="user-input" placeholder="Contanos tu síntoma, inquietud o consulta..." autocomplete="off" />
+      <button id="send-button" type="submit">Enviar</button>
+    </form>
+  </div>
+  <div class="footer">
+    Chat médico inteligente y sistema de telemedicina demo para <strong>Primaria Salud</strong> · 
+    <a href="https://www.primariasalud.com.ar" target="_blank">www.primariasalud.com.ar</a>
+  </div>
+  <script src="chat.js"></script>
 </body>
 </html>
