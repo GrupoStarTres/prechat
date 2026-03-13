@@ -1,106 +1,48 @@
-/**
- * LLM Chat Application Template - Modificado para bgftech.shop
+ /**
+ * LLM Chat Application - Adaptado a Primaria Salud Emergencias & Triage (primariasalud.com.ar)
  */
 import { Env, ChatMessage } from "./types";
 
+// Modelo LLM recomendado, puedes ajustar según tu proveedor de IA
 const MODEL_ID = "@cf/meta/llama-3.1-8b-instruct-fp8";
 
-// System prompt personalizado
-const SYSTEM_PROMPT = `Eres un asistente virtual de la tienda bgftech.shop, especializada en productos de diagnóstico automotriz y electrónica. Tu objetivo es ayudar a los clientes proporcionando información sobre los productos disponibles, precios y detalles técnicos. Responde de manera amigable y concisa en español. Si no sabes la respuesta, indícalo amablemente y sugiere consultar directamente en la tienda.`;
-
-const STORE_URL = "https://bgftech.shop/tienda/";
-
-/**
- * Obtiene y procesa el contenido de la tienda
- */
-async function fetchStoreData(): Promise<string | null> {
-  try {
-    const response = await fetch(STORE_URL);
-    if (!response.ok) return null;
-    const html = await response.text();
-    
-    // Limpieza básica de HTML
-    const textContent = html
-      .replace(/<[^>]*>/g, ' ')
-      .replace(/\s+/g, ' ')
-      .trim();
-    
-    // Limitar a 3000 caracteres
-    const maxLength = 3000;
-    return textContent.length > maxLength
-      ? textContent.substring(0, maxLength) + "..."
-      : textContent;
-  } catch (error) {
-    console.error("Error en fetchStoreData:", error);
-    return null;
-  }
-}
+const SYSTEM_PROMPT = `Eres un sistema de triage médico virtual especializado en atención primaria para pacientes en Argentina, de la empresa Primaria Salud (https://www.primariasalud.com.ar). Atiendes consultas sobre síntomas frecuentes, urgencias, cuidado general y orientación en salud. NUNCA haces diagnósticos ni recetas, solo orientas, sugieres y adviertes cuándo se debe acudir al médico o emergencia. Siempre recuerda a los usuarios que esto no reemplaza una consulta presencial. Sigue estos lineamientos:
+- Responde siempre en español.
+- Si los síntomas son graves, sugiere contactarse urgente con emergencias (107).
+- Sé muy claro, cercano y profesional.
+- Deja en claro que eres una IA orientativa entrenada por médicos argentinos.
+`;
 
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
 
-    // Servir frontend estático
+    // Servir frontend
     if (url.pathname === "/" || !url.pathname.startsWith("/api/")) {
       return env.ASSETS.fetch(request);
     }
 
-    // API de chat
-    if (url.pathname === "/api/chat") {
-      if (request.method === "POST") {
-        return handleChatRequest(request, env);
-      }
-      return new Response("Method not allowed", { status: 405 });
+    // API de chat principal
+    if (url.pathname === "/api/chat" && request.method === "POST") {
+      const { messages = [] } = await request.json() as { messages: ChatMessage[] };
+      // Anteponer el System Prompt solo si no está presente
+      const finalMessages: ChatMessage[] = [
+        ...(messages.some(msg => msg.role === "system") ? [] : [{ role: "system", content: SYSTEM_PROMPT }]),
+        ...messages,
+      ];
+      // Solicitud al modelo de lenguaje en streaming
+      const stream = await env.AI.run(MODEL_ID, {
+        messages: finalMessages,
+        max_tokens: 1024,
+        stream: true,
+      });
+      return new Response(stream, {
+        headers: {
+          "content-type": "text/event-stream; charset=utf-8",
+        },
+      });
     }
 
     return new Response("Not found", { status: 404 });
   },
-} satisfies ExportedHandler<Env>;
-
-async function handleChatRequest(request: Request, env: Env): Promise<Response> {
-  try {
-    const { messages = [] } = (await request.json()) as { messages: ChatMessage[] };
-
-    // Obtener datos actualizados de la tienda
-    const storeData = await fetchStoreData();
-
-    // Construir la lista final de mensajes
-    const finalMessages: ChatMessage[] = [];
-
-    if (storeData) {
-      finalMessages.push({
-        role: "system",
-        content: `Información actual de la tienda bgftech.shop:\n${storeData}`
-      });
-    }
-
-    // Añadir system prompt si no existe
-    if (!messages.some(msg => msg.role === "system")) {
-      finalMessages.push({ role: "system", content: SYSTEM_PROMPT });
-    }
-
-    // Añadir el resto de la conversación
-    finalMessages.push(...messages);
-
-    // Llamar al modelo con streaming
-    const stream = await env.AI.run(MODEL_ID, {
-      messages: finalMessages,
-      max_tokens: 1024,
-      stream: true,
-    });
-
-    return new Response(stream, {
-      headers: {
-        "content-type": "text/event-stream; charset=utf-8",
-        "cache-control": "no-cache",
-        connection: "keep-alive",
-      },
-    });
-  } catch (error) {
-    console.error("Error en chat:", error);
-    return new Response(
-      JSON.stringify({ error: "Failed to process request" }),
-      { status: 500, headers: { "content-type": "application/json" } }
-    );
-  }
-}
+};
