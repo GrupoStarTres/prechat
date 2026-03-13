@@ -1,230 +1,122 @@
-/**
- * LLM Chat App Frontend
- *
- * Handles the chat UI interactions and communication with the backend API.
- */
-
-// DOM elements
+// DOM
 const chatMessages = document.getElementById("chat-messages");
 const userInput = document.getElementById("user-input");
 const sendButton = document.getElementById("send-button");
 const typingIndicator = document.getElementById("typing-indicator");
 
-// Chat state
+// Estado
 let chatHistory = [
-	{
-		role: "assistant",
-		content:
-			"Hello! I'm an LLM chat app powered by Cloudflare Workers AI. How can I help you today?",
-	},
+  {
+    role: "assistant",
+    content: "Hola, soy el Asistente Médico IA de Primaria Salud. Describe tu síntoma o consulta y te orientaré según protocolos de triage de atención primaria en Argentina."
+  }
 ];
 let isProcessing = false;
 
-// Auto-resize textarea as user types
+// Auto-resize y control (puedes mejorarlo con un textarea si te gustaría multinea)
 userInput.addEventListener("input", function () {
-	this.style.height = "auto";
-	this.style.height = this.scrollHeight + "px";
+  this.style.height = "auto";
+  this.style.height = this.scrollHeight + "px";
 });
-
-// Send message on Enter (without Shift)
 userInput.addEventListener("keydown", function (e) {
-	if (e.key === "Enter" && !e.shiftKey) {
-		e.preventDefault();
-		sendMessage();
-	}
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
 });
 
-// Send button click handler
-sendButton.addEventListener("click", sendMessage);
+// Enviar por click
+sendButton.addEventListener("click", function(e){
+  e.preventDefault();
+  sendMessage();
+});
+
+function addMessageToChat(role, text) {
+  const msgDiv = document.createElement("div");
+  msgDiv.className = "message " + (role === "user" ? "user" : "assistant");
+  msgDiv.textContent = text;
+  chatMessages.appendChild(msgDiv);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// Mensaje al cargar: 
+addMessageToChat("assistant", chatHistory[0].content);
 
 /**
- * Sends a message to the chat API and processes the response
+ * Enviar consulta a la API IA
  */
 async function sendMessage() {
-	const message = userInput.value.trim();
+  const message = userInput.value.trim();
+  if (message === "" || isProcessing) return;
+  isProcessing = true;
+  userInput.disabled = true;
+  sendButton.disabled = true;
 
-	// Don't send empty messages
-	if (message === "" || isProcessing) return;
+  addMessageToChat("user", message);
+  userInput.value = "";
+  typingIndicator.style.display = "block";
+  chatHistory.push({ role: "user", content: message });
 
-	// Disable input while processing
-	isProcessing = true;
-	userInput.disabled = true;
-	sendButton.disabled = true;
+  try {
+    // Aquí puedes editar la url si tu backend está en otro origen
+    const response = await fetch("/api/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        messages: [
+          // System prompt personalizado
+          {
+            role: "system",
+            content: "Eres un sistema de triage médico virtual especializado en atención primaria en Argentina. Tus respuestas son empáticas, orientativas, nunca dan diagnósticos finales ni recetan medicamentos. Siempre recomienda atención presencial ante síntomas graves o dudas. Hablas en español sencillo para pacientes argentinos."
+          },
+          ...chatHistory.slice(1) // omitimos el mensaje inicial assistant textual
+        ]
+      }),
+    });
 
-	// Add user message to chat
-	addMessageToChat("user", message);
+    if (!response.ok || !response.body) throw new Error("API error");
 
-	// Clear input
-	userInput.value = "";
-	userInput.style.height = "auto";
+    // Procesa respuesta streaming SSE
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let partial = "";
+    let done = false;
+    let aiMessageText = "";
+    const assistantDiv = document.createElement("div");
+    assistantDiv.className = "message assistant";
+    chatMessages.appendChild(assistantDiv);
 
-	// Show typing indicator
-	typingIndicator.classList.add("visible");
-
-	// Add message to history
-	chatHistory.push({ role: "user", content: message });
-
-	try {
-		// Create new assistant response element
-		const assistantMessageEl = document.createElement("div");
-		assistantMessageEl.className = "message assistant-message";
-		assistantMessageEl.innerHTML = "<p></p>";
-		chatMessages.appendChild(assistantMessageEl);
-		const assistantTextEl = assistantMessageEl.querySelector("p");
-
-		// Scroll to bottom
-		chatMessages.scrollTop = chatMessages.scrollHeight;
-
-		// Send request to API
-		const response = await fetch("/api/chat", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				messages: chatHistory,
-			}),
-		});
-
-		// Handle errors
-		if (!response.ok) {
-			throw new Error("Failed to get response");
-		}
-		if (!response.body) {
-			throw new Error("Response body is null");
-		}
-
-		// Process streaming response
-		const reader = response.body.getReader();
-		const decoder = new TextDecoder();
-		let responseText = "";
-		let buffer = "";
-		const flushAssistantText = () => {
-			assistantTextEl.textContent = responseText;
-			chatMessages.scrollTop = chatMessages.scrollHeight;
-		};
-
-		let sawDone = false;
-		while (true) {
-			const { done, value } = await reader.read();
-
-			if (done) {
-				// Process any remaining complete events in buffer
-				const parsed = consumeSseEvents(buffer + "\n\n");
-				for (const data of parsed.events) {
-					if (data === "[DONE]") {
-						break;
-					}
-					try {
-						const jsonData = JSON.parse(data);
-						// Handle both Workers AI format (response) and OpenAI format (choices[0].delta.content)
-						let content = "";
-						if (
-							typeof jsonData.response === "string" &&
-							jsonData.response.length > 0
-						) {
-							content = jsonData.response;
-						} else if (jsonData.choices?.[0]?.delta?.content) {
-							content = jsonData.choices[0].delta.content;
-						}
-						if (content) {
-							responseText += content;
-							flushAssistantText();
-						}
-					} catch (e) {
-						console.error("Error parsing SSE data as JSON:", e, data);
-					}
-				}
-				break;
-			}
-
-			// Decode chunk
-			buffer += decoder.decode(value, { stream: true });
-			const parsed = consumeSseEvents(buffer);
-			buffer = parsed.buffer;
-			for (const data of parsed.events) {
-				if (data === "[DONE]") {
-					sawDone = true;
-					buffer = "";
-					break;
-				}
-				try {
-					const jsonData = JSON.parse(data);
-					// Handle both Workers AI format (response) and OpenAI format (choices[0].delta.content)
-					let content = "";
-					if (
-						typeof jsonData.response === "string" &&
-						jsonData.response.length > 0
-					) {
-						content = jsonData.response;
-					} else if (jsonData.choices?.[0]?.delta?.content) {
-						content = jsonData.choices[0].delta.content;
-					}
-					if (content) {
-						responseText += content;
-						flushAssistantText();
-					}
-				} catch (e) {
-					console.error("Error parsing SSE data as JSON:", e, data);
-				}
-			}
-			if (sawDone) {
-				break;
-			}
-		}
-
-		// Add completed response to chat history
-		if (responseText.length > 0) {
-			chatHistory.push({ role: "assistant", content: responseText });
-		}
-	} catch (error) {
-		console.error("Error:", error);
-		addMessageToChat(
-			"assistant",
-			"Sorry, there was an error processing your request.",
-		);
-	} finally {
-		// Hide typing indicator
-		typingIndicator.classList.remove("visible");
-
-		// Re-enable input
-		isProcessing = false;
-		userInput.disabled = false;
-		sendButton.disabled = false;
-		userInput.focus();
-	}
-}
-
-/**
- * Helper function to add message to chat
- */
-function addMessageToChat(role, content) {
-	const messageEl = document.createElement("div");
-	messageEl.className = `message ${role}-message`;
-	messageEl.innerHTML = `<p>${content}</p>`;
-	chatMessages.appendChild(messageEl);
-
-	// Scroll to bottom
-	chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-
-function consumeSseEvents(buffer) {
-	let normalized = buffer.replace(/\r/g, "");
-	const events = [];
-	let eventEndIndex;
-	while ((eventEndIndex = normalized.indexOf("\n\n")) !== -1) {
-		const rawEvent = normalized.slice(0, eventEndIndex);
-		normalized = normalized.slice(eventEndIndex + 2);
-
-		const lines = rawEvent.split("\n");
-		const dataLines = [];
-		for (const line of lines) {
-			if (line.startsWith("data:")) {
-				dataLines.push(line.slice("data:".length).trimStart());
-			}
-		}
-		if (dataLines.length === 0) continue;
-		events.push(dataLines.join("\n"));
-	}
-	return { events, buffer: normalized };
+    while (!done) {
+      const { value, done: streamDone } = await reader.read();
+      done = streamDone;
+      if (value) {
+        partial += decoder.decode(value, { stream: true });
+        // Divide y procesa SSE
+        let chunks = partial.split("\n\n");
+        partial = chunks.pop(); // lo que quedó incompleto
+        for (const chunk of chunks) {
+          if (!chunk.includes("data:")) continue;
+          const line = chunk.split("data:").pop();
+          if (line.trim() === "[DONE]") continue;
+          try {
+            const data = JSON.parse(line);
+            aiMessageText += data.response || (data.choices && data.choices[0].delta && data.choices[0].delta.content) || "";
+            assistantDiv.textContent = aiMessageText;
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+          } catch {}
+        }
+      }
+    }
+    typingIndicator.style.display = "none";
+    aiMessageText = aiMessageText.trim();
+    if (aiMessageText) chatHistory.push({ role: "assistant", content: aiMessageText });
+  } catch (e) {
+    addMessageToChat("assistant", "Ocurrió un error. Intenta de nuevo.");
+    typingIndicator.style.display = "none";
+  }
+  userInput.disabled = false;
+  sendButton.disabled = false;
+  isProcessing = false;
 }
