@@ -3,231 +3,337 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Primaria Salud | Telemedicina y Chat Médico</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap">
+  <title>Primaria Salud | Telemedicina de Próxima Generación</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700,800&display=swap">
   <style>
     :root {
-      --ps-blue: #2154a3;
-      --ps-green: #78b33b;
-      --ps-light: #f7fafd;
-      --ps-gray: #e7ecef;
-      --ps-dark: #234063;
-      --ps-accent: #FFB200;
-      --radius: 18px;
+      --ps-blue: #1a4b8f;
+      --ps-blue-light: #eef4ff;
+      --ps-green: #68a033;
+      --ps-green-hover: #56852a;
+      --ps-light: #fcfdfe;
+      --ps-dark: #1e293b;
+      --ps-accent: #ffb200;
+      --radius: 20px;
+      --shadow: 0 10px 25px -5px rgba(26, 75, 143, 0.1), 0 8px 10px -6px rgba(26, 75, 143, 0.1);
     }
-    html,body {
-      height: 100%;
+
+    * { box-sizing: border-box; }
+
+    body {
       margin: 0;
-      font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+      font-family: 'Montserrat', sans-serif;
       background: var(--ps-light);
       color: var(--ps-dark);
+      line-height: 1.6;
     }
-    .landing {
-      max-width: 530px;
-      margin: 36px auto 16px auto;
-      background: #fff;
-      padding: 32px 22px 26px 22px;
-      border-radius: var(--radius);
-      box-shadow: 0 6px 36px rgba(33,84,163,0.09);
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* --- Header & Logo --- */
+    header {
       text-align: center;
+      padding: 40px 20px 20px;
     }
-    .logo-svg {
-      display: block;
-      margin: 0 auto 14px auto;
-      width: 72px;
-      height: 72px;
+
+    .logo-container {
+      background: white;
+      width: 90px;
+      height: 90px;
+      border-radius: 25%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      box-shadow: var(--shadow);
     }
+
+    .logo-svg { width: 60px; height: 60px; }
+
     h1 {
-      font-size: 2.1em;
+      font-size: 2.2em;
       font-weight: 800;
-      margin: 0 0 13px 0;
+      margin: 0;
       color: var(--ps-blue);
+      letter-spacing: -1px;
     }
-    .promo {
+
+    .tagline {
+      font-size: 1.1em;
       color: var(--ps-green);
-      font-weight: bold;
-      font-size: 1.13em;
-      margin-bottom: 8px;
-      letter-spacing: 0.5px;
+      font-weight: 600;
+      margin-top: 5px;
     }
-    .landing ul {
-      text-align: left;
-      padding: 0 0 0 17px;
-      margin: 20px 0 20px 10px;
+
+    /* --- Feature Cards --- */
+    .hero-card {
+      background: white;
+      padding: 30px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 25px;
+      border-top: 5px solid var(--ps-green);
     }
-    .landing ul li {
-      font-size: 1.04em;
-      margin: 8px 0;
-      line-height: 1.54;
-    }
-    .demo {
-      background: var(--ps-accent);
-      color: #fff;
+
+    .highlight-box {
+      background: var(--ps-blue-light);
+      padding: 15px;
       border-radius: 12px;
-      padding: 8px 10px;
-      font-size: 1.07em;
-      display: inline-block;
-      margin-top: 12px;
-      margin-bottom: 2px;
-      font-weight: bold;
-      letter-spacing: .5px;
+      margin: 20px 0;
+      border-left: 4px solid var(--ps-blue);
+      text-align: left;
     }
-    .privacy-text {
-      color: var(--ps-dark);
-      font-size: .98em;
-      margin-top: 20px;
-      margin-bottom: 3px;
+
+    .grid-features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin: 25px 0;
+      text-align: left;
     }
-    .tele-banner {
-      margin: 22px 0 13px 0;
-      background: linear-gradient(90deg, var(--ps-green) 0%, var(--ps-blue) 100%);
-      color: #fff;
+
+    .feature-item {
+      font-size: 0.9em;
+      padding: 10px;
+      background: #f8fafc;
       border-radius: 10px;
-      padding: 6px 0;
-      font-weight: bold;
-      font-size: 1.07em;
-      box-shadow: 0 2px 8px rgba(33,84,163,.09);
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
-    .chat-container {
-      background: #fff;
-      max-width: 530px;
-      margin: 0 auto 40px auto;
+
+    .feature-item i { color: var(--ps-green); font-weight: bold; }
+
+    /* --- Floating Demo Badge --- */
+    .demo-badge {
+      display: inline-block;
+      background: var(--ps-accent);
+      color: white;
+      padding: 5px 15px;
+      border-radius: 50px;
+      font-size: 0.75em;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    /* --- Chat Interface --- */
+    .chat-wrapper {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
       display: flex;
       flex-direction: column;
-      border-radius: var(--radius);
-      box-shadow: 0 4px 18px rgba(33,84,163,.065);
-      padding: 11px 10px 0 10px;
+      height: 500px;
     }
+
+    .chat-header {
+      background: var(--ps-blue);
+      color: white;
+      padding: 15px 20px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      background: #4ade80;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #4ade80;
+    }
+
+    #chat-messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
     .message {
-      border-radius: 13px;
-      margin: 5px 0;
-      padding: 13px 15px;
-      max-width: 89%;
-      line-height: 1.5;
-      font-size: 1.01em;
-      word-break: break-word;
+      max-width: 85%;
+      padding: 12px 16px;
+      border-radius: 18px;
+      font-size: 0.95em;
+      position: relative;
     }
+
     .assistant {
-      background: #e1eeff;
+      background: var(--ps-blue-light);
       color: var(--ps-dark);
       align-self: flex-start;
+      border-bottom-left-radius: 4px;
     }
+
     .user {
       background: var(--ps-blue);
-      color: #fff;
+      color: white;
       align-self: flex-end;
+      border-bottom-right-radius: 4px;
     }
+
     .input-area {
+      padding: 20px;
+      background: white;
       display: flex;
-      gap: 12px;
-      padding: 14px 0 22px 0;
+      gap: 10px;
+      border-top: 1px solid #eee;
     }
-    input {
+
+    input[type="text"] {
       flex: 1;
-      padding: 12px;
-      border-radius: 10px;
-      border: 1px solid var(--ps-blue);
+      padding: 12px 18px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
       outline: none;
-      font-size: 1em;
+      transition: border-color 0.2s;
     }
+
+    input[type="text"]:focus { border-color: var(--ps-blue); }
+
     button#send-button {
       background: var(--ps-green);
-      color: #fff;
+      color: white;
       border: none;
-      padding: 0 24px;
-      border-radius: 9px;
+      padding: 0 20px;
+      border-radius: 12px;
+      font-weight: 700;
       cursor: pointer;
-      font-weight: bold;
-      font-size: 1em;
-      box-shadow: 0 2px 6px rgba(120,179,59,0.04);
-      transition: background 0.18s;
+      transition: 0.3s;
     }
-    button#send-button:hover {
-      background: #93ce51;
-    }
-    .typing {
-      font-size: .95em;
-      color: var(--ps-green);
-      margin-bottom: 2px;
-      display: none;
-      font-style: italic;
-    }
-    .footer {
-      max-width: 530px;
-      background: #f8f8f8;
-      color: var(--ps-dark);
-      font-size: .99em;
+
+    button#send-button:hover { background: var(--ps-green-hover); }
+
+    /* --- Footer --- */
+    footer {
       text-align: center;
-      padding: 12px 8px 8px 8px;
-      margin: 0 auto 24px auto;
-      border-radius: 9px;
-      margin-bottom: 2vw;
+      padding: 30px 20px;
+      font-size: 0.85em;
+      color: #64748b;
     }
-    .footer strong { color: var(--ps-blue);}
-    @media (max-width: 700px) {
-      .landing, .footer, .chat-container { max-width: 99vw; padding-left: 2vw; padding-right: 2vw; }
-      .logo-svg { width: 60px; height: 60px;}
+
+    .tech-stack {
+      margin-top: 10px;
+      font-size: 0.8em;
+      opacity: 0.7;
+    }
+
+    @media (max-width: 480px) {
+      .grid-features { grid-template-columns: 1fr; }
+      h1 { font-size: 1.8em; }
     }
   </style>
 </head>
 <body>
-  <div class="landing">
-    <svg class="logo-svg" viewBox="0 0 108 108" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="54" cy="54" r="50" fill="#2154a3"/>
-      <rect x="44" y="23" width="20" height="63" rx="7" fill="#78b33b"/>
-      <rect x="23" y="44" width="63" height="20" rx="7" fill="#78b33b"/>
-      <circle cx="54" cy="54" r="19" fill="#fff" opacity=".95"/>
-      <circle cx="54" cy="54" r="12" fill="#78b33b" />
-    </svg>
+
+<div class="container">
+  <header>
+    <div class="logo-container">
+      <svg class="logo-svg" viewBox="0 0 108 108" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="54" cy="54" r="50" fill="#1a4b8f"/>
+        <rect x="44" y="23" width="20" height="63" rx="7" fill="#68a033"/>
+        <rect x="23" y="44" width="63" height="20" rx="7" fill="#68a033"/>
+        <circle cx="54" cy="54" r="15" fill="#fff" />
+      </svg>
+    </div>
     <h1>Primaria Salud</h1>
-    <div class="promo">Sistema de chat bot entrenado por médicos para guiarte</div>
-    <div class="tele-banner">
-      Sistema de telemedicina para afiliados y pacientes particulares<br>
-      <small>¡Accedé con un solo click a un médico, sin instalar nada!</small>
+    <div class="tagline">Telemedicina Humana & Inteligente</div>
+  </header>
+
+  <section class="hero-card">
+    <div class="demo-badge">Demo Tecnológico</div>
+    <p>Somos el primer sistema abierto que elimina las barreras de la salud digital. Una IA <strong>entrenada por médicos</strong> diseñada para guiarte sin costos de licencias externas.</p>
+    
+    <div class="highlight-box">
+      <strong>🚀 Sin Apps. Sin Contraseñas.</strong><br>
+      Recibís un link en tu WhatsApp, hacés click y ya estás en consulta. Rápido, seguro y desde cualquier navegador.
     </div>
-    <ul>
-      <li>Atención segura para recetas digitales, certificados y consultas simples.</li>
-      <li>Recibí tus recetas o documentos a tu WhatsApp o correo electrónico automáticamente.</li>
-      <li>Consultas sobre dudas o indicaciones previo a estudios, procedimientos o síntomas.</li>
-      <li>Recordatorios, orientación y aviso si debés acudir personalmente a consulta médica.</li>
-      <li>
-        Chat especializado: Consultas gratis y orientación médica al instante.
-        Si corresponde, te derivamos en el momento con un médico online.
-      </li>
-      <li>
-        Privacidad total: Usamos solo nuestra web. 
-        <b>No necesitás descargar apps ni crear usuario ni contraseña.</b>
-      </li>
-      <li>
-        Pedí tu turno fácil: ingresá tu número de WhatsApp, solicitá el turno y recibís el enlace directo para tu consulta médica online.
-      </li>
-      <li>
-        La palabra final es de los médicos: usá el chat como guía inicial, ¡pero ante dudas o síntomas importantes, consultá!
-      </li>
-    </ul>
-    <div class="demo">Esto es un demo ilustrativo del proyecto de telemedicina presentado</div>
-    <div class="privacy-text">
-      Velocidad, seguridad y privacidad en tu atención. Comunicación digital automática por tu WhatsApp.<br>
-      <strong>Gestión de turnos y consultas rápidas.</strong>
+
+    <div class="grid-features">
+      <div class="feature-item"><i>✓</i> Recetas Digitales</div>
+      <div class="feature-item"><i>✓</i> Certificados Médicos</div>
+      <div class="feature-item"><i>✓</i> Guía de Estudios</div>
+      <div class="feature-item"><i>✓</i> Consultas Simples</div>
     </div>
-  </div>
-  <div class="chat-container">
-    <div class="message assistant">
-      Bienvenido/a a <b>Primaria Salud</b>.<br>
-      Consultá gratis con nuestro <b>asistente entrenado por médicos</b> para orientación inicial (triage). Si se necesita, te derivaremos a un médico online.<br>
-      <b>Ante emergencia, llamá al 107.</b>
+
+    <p style="font-size: 0.9em; color: #64748b;">
+      Disponible para <strong>afiliados (sin cargo)</strong> y <strong>pacientes privados</strong> mediante un bono mínimo. Documentación directa a tu móvil.
+    </p>
+  </section>
+
+  <div class="chat-wrapper">
+    <div class="chat-header">
+      <div class="status-dot"></div>
+      Asistente Médico IA (Gratuito)
     </div>
-    <div id="chat-messages"></div>
-    <div id="typing-indicator" class="typing">Escribiendo...</div>
-    <form class="input-area" id="chat-form" autocomplete="off">
-      <input type="text" id="user-input" placeholder="Contanos tu síntoma, inquietud o consulta..." autocomplete="off" />
+    
+    <div id="chat-messages">
+      <div class="message assistant">
+        ¡Hola! Soy la IA de Primaria Salud. Estoy entrenada por especialistas para orientarte de forma gratuita.<br><br>
+        <strong>¿En qué puedo ayudarte hoy?</strong> (Ej: "Tengo dolor de cabeza", "Necesito un turno", "¿Cómo saco una receta?")
+      </div>
+    </div>
+
+    <div id="typing-indicator" style="display:none; padding: 0 20px 10px; font-size: 0.8em; color: var(--ps-green); font-style: italic;">La IA está analizando tu consulta...</div>
+
+    <form class="input-area" id="chat-form">
+      <input type="text" id="user-input" placeholder="Escribe tu consulta aquí..." required autocomplete="off">
       <button id="send-button" type="submit">Enviar</button>
     </form>
   </div>
-  <div class="footer">
-    Chat médico inteligente y sistema de telemedicina demo para <strong>Primaria Salud</strong> · 
-    <a href="https://www.primariasalud.com.ar" target="_blank">www.primariasalud.com.ar</a>
-  </div>
-  <script src="chat.js"></script>
+
+  <footer>
+    <p><strong>Primaria Salud</strong> &copy; 2026<br>
+    Soberanía de Datos & Tecnología Open Source</p>
+    <div class="tech-stack">
+      Cloudflare Workers AI • Zero Egress Architecture • Neurociencias Informáticas
+    </div>
+  </footer>
+</div>
+
+<script>
+  // Script básico para simular comportamiento del demo
+  const chatForm = document.getElementById('chat-form');
+  const userInput = document.getElementById('user-input');
+  const chatMessages = document.getElementById('chat-messages');
+  const typingIndicator = document.getElementById('typing-indicator');
+
+  chatForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const text = userInput.value.trim();
+    if(!text) return;
+
+    // Agregar mensaje de usuario
+    appendMessage(text, 'user');
+    userInput.value = '';
+
+    // Simular respuesta de IA
+    typingIndicator.style.display = 'block';
+    setTimeout(() => {
+      typingIndicator.style.display = 'none';
+      appendMessage("Gracias por tu consulta. Esta es una demostración de la velocidad de respuesta de nuestra arquitectura. Los médicos de Primaria Salud están entrenando este modelo para darte la mejor orientación.", 'assistant');
+    }, 1500);
+  });
+
+  function appendMessage(text, side) {
+    const div = document.createElement('div');
+    div.className = `message ${side}`;
+    div.innerText = text;
+    chatMessages.appendChild(div);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+</script>
+
 </body>
 </html>
