@@ -1,350 +1,48 @@
- <!doctype html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Primaria Salud | Demo IA Médica</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700,800&display=swap">
-  <style>
-    :root {
-      --ps-blue: #1a4b8f;
-      --ps-blue-light: #eef4ff;
-      --ps-green: #68a033;
-      --ps-green-hover: #56852a;
-      --ps-light: #fcfdfe;
-      --ps-dark: #1e293b;
-      --ps-accent: #ffb200;
-      --radius: 20px;
-      --shadow: 0 10px 25px -5px rgba(26, 75, 143, 0.1), 0 8px 10px -6px rgba(26, 75, 143, 0.1);
+ /**
+ * LLM Chat Application - Adaptado a Primaria Salud Emergencias & Triage (primariasalud.com.ar)
+ */
+import { Env, ChatMessage } from "./types";
+
+// Modelo LLM recomendado, puedes ajustar según tu proveedor de IA
+const MODEL_ID = "@cf/meta/llama-3.1-8b-instruct-fp8";
+
+const SYSTEM_PROMPT = `Eres un sistema de triage médico virtual especializado en atención primaria para pacientes en Argentina, de la empresa Primaria Salud (https://www.primariasalud.com.ar). Atiendes consultas sobre síntomas frecuentes, urgencias, cuidado general y orientación en salud. NUNCA haces diagnósticos ni recetas, solo orientas, sugieres y adviertes cuándo se debe acudir al médico o emergencia. Siempre recuerda a los usuarios que esto no reemplaza una consulta presencial. Sigue estos lineamientos:
+- Responde siempre en español.
+- Si los síntomas son graves, sugiere contactarse urgente con emergencias (107).
+- Sé muy claro, cercano y profesional.
+- Deja en claro que eres una IA orientativa entrenada por médicos argentinos.
+`;
+
+export default {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+    const url = new URL(request.url);
+
+    // Servir frontend
+    if (url.pathname === "/" || !url.pathname.startsWith("/api/")) {
+      return env.ASSETS.fetch(request);
     }
 
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      font-family: 'Montserrat', sans-serif;
-      background: var(--ps-light);
-      color: var(--ps-dark);
-      line-height: 1.6;
+    // API de chat principal
+    if (url.pathname === "/api/chat" && request.method === "POST") {
+      const { messages = [] } = await request.json() as { messages: ChatMessage[] };
+      // Anteponer el System Prompt solo si no está presente
+      const finalMessages: ChatMessage[] = [
+        ...(messages.some(msg => msg.role === "system") ? [] : [{ role: "system", content: SYSTEM_PROMPT }]),
+        ...messages,
+      ];
+      // Solicitud al modelo de lenguaje en streaming
+      const stream = await env.AI.run(MODEL_ID, {
+        messages: finalMessages,
+        max_tokens: 1024,
+        stream: true,
+      });
+      return new Response(stream, {
+        headers: {
+          "content-type": "text/event-stream; charset=utf-8",
+        },
+      });
     }
 
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-
-    header {
-      text-align: center;
-      padding: 30px 20px 10px;
-    }
-
-    .logo-container {
-      background: white;
-      width: 80px;
-      height: 80px;
-      border-radius: 22%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 15px;
-      box-shadow: var(--shadow);
-    }
-
-    .logo-svg { width: 50px; height: 50px; }
-
-    h1 {
-      font-size: 2em;
-      font-weight: 800;
-      margin: 0;
-      color: var(--ps-blue);
-      letter-spacing: -1px;
-    }
-
-    .tagline {
-      font-size: 1em;
-      color: var(--ps-green);
-      font-weight: 600;
-    }
-
-    .hero-card {
-      background: white;
-      padding: 25px;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      margin-bottom: 20px;
-      border-top: 5px solid var(--ps-green);
-    }
-
-    .demo-badge {
-      display: inline-block;
-      background: var(--ps-accent);
-      color: white;
-      padding: 4px 12px;
-      border-radius: 50px;
-      font-size: 0.7em;
-      font-weight: 800;
-      text-transform: uppercase;
-      margin-bottom: 10px;
-    }
-
-    .highlight-box {
-      background: var(--ps-blue-light);
-      padding: 12px;
-      border-radius: 12px;
-      margin: 15px 0;
-      border-left: 4px solid var(--ps-blue);
-      font-size: 0.9em;
-    }
-
-    /* --- Chat Interface --- */
-    .chat-wrapper {
-      background: white;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      height: 550px;
-      border: 1px solid #e2e8f0;
-    }
-
-    .chat-header {
-      background: var(--ps-blue);
-      color: white;
-      padding: 15px 20px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .status-group { display: flex; align-items: center; gap: 8px; }
-    .status-dot {
-      width: 10px;
-      height: 10px;
-      background: #4ade80;
-      border-radius: 50%;
-      box-shadow: 0 0 8px #4ade80;
-    }
-
-    #chat-messages {
-      flex: 1;
-      padding: 20px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      background-color: #f8fafc;
-      background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
-      background-size: 20px 20px;
-    }
-
-    .message {
-      max-width: 85%;
-      padding: 12px 16px;
-      border-radius: 18px;
-      font-size: 0.95em;
-      position: relative;
-      animation: fadeIn 0.3s ease;
-    }
-
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-
-    .assistant {
-      background: white;
-      color: var(--ps-dark);
-      align-self: flex-start;
-      border-bottom-left-radius: 4px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    }
-
-    .user {
-      background: var(--ps-blue);
-      color: white;
-      align-self: flex-end;
-      border-bottom-right-radius: 4px;
-    }
-
-    .input-area {
-      padding: 15px;
-      background: white;
-      display: flex;
-      gap: 10px;
-      border-top: 1px solid #eee;
-    }
-
-    input[type="text"] {
-      flex: 1;
-      padding: 12px 18px;
-      border: 2px solid #e2e8f0;
-      border-radius: 12px;
-      outline: none;
-      font-family: inherit;
-    }
-
-    input[type="text"]:focus { border-color: var(--ps-blue); }
-
-    button#send-button {
-      background: var(--ps-green);
-      color: white;
-      border: none;
-      padding: 0 20px;
-      border-radius: 12px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    #typing-indicator {
-      padding: 5px 20px;
-      font-size: 0.8em;
-      color: var(--ps-blue);
-      font-weight: 600;
-      display: none;
-    }
-
-    footer {
-      text-align: center;
-      padding: 30px 20px;
-      font-size: 0.8em;
-      color: #64748b;
-    }
-
-    @media (max-width: 480px) {
-      h1 { font-size: 1.7em; }
-      .chat-wrapper { height: 500px; }
-    }
-  </style>
-</head>
-<body>
-
-<div class="container">
-  <header>
-    <div class="logo-container">
-      <svg class="logo-svg" viewBox="0 0 108 108" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="54" cy="54" r="50" fill="#1a4b8f"/>
-        <rect x="44" y="23" width="20" height="63" rx="7" fill="#68a033"/>
-        <rect x="23" y="44" width="63" height="20" rx="7" fill="#68a033"/>
-        <circle cx="54" cy="54" r="15" fill="#fff" />
-      </svg>
-    </div>
-    <h1>Primaria Salud</h1>
-    <div class="tagline">IA Médica de Orientación Gratuita</div>
-  </header>
-
-  <section class="hero-card">
-    <div class="demo-badge">Demo Activo</div>
-    <p>Probá nuestra tecnología de orientación médica. Esta IA ha sido <strong>entrenada por profesionales</strong> para resolver dudas rápidas y guiar tu atención.</p>
-    <div class="highlight-box">
-      <strong>💡 Sugerencia:</strong> Probá preguntando por síntomas, cómo obtener una receta o qué hacer ante un dolor de espalda.
-    </div>
-  </section>
-
-  <div class="chat-wrapper">
-    <div class="chat-header">
-      <div class="status-group">
-        <div class="status-dot"></div>
-        <span>Asistente Médico Online</span>
-      </div>
-      <small style="opacity: 0.8;">Demo v1.0</small>
-    </div>
-    
-    <div id="chat-messages">
-      <div class="message assistant">
-        Hola, soy el asistente de <b>Primaria Salud</b>. Estoy aquí para escucharte y orientarte de forma gratuita. <br><br>
-        ¿Qué síntoma o duda médica tenés en este momento?
-      </div>
-    </div>
-
-    <div id="typing-indicator">La IA está analizando tu consulta...</div>
-
-    <form class="input-area" id="chat-form">
-      <input type="text" id="user-input" placeholder="Escribí aquí tu consulta..." required autocomplete="off">
-      <button id="send-button" type="submit">Enviar</button>
-    </form>
-  </div>
-
-  <footer>
-    <p><strong>Primaria Salud</strong> &copy; 2026<br>
-    Tecnología Cloudflare Workers AI - Implementación Open Source</p>
-    <p style="margin-top:10px; opacity: 0.6;">Este es un modelo de lenguaje con fines ilustrativos. Ante una emergencia real, contacte siempre a los servicios locales.</p>
-  </footer>
-</div>
-
-<script>
-  const chatForm = document.getElementById('chat-form');
-  const userInput = document.getElementById('user-input');
-  const chatMessages = document.getElementById('chat-messages');
-  const typingIndicator = document.getElementById('typing-indicator');
-
-  // Lógica de respuestas médicas simuladas (Base de conocimiento del demo)
-  const medicalResponses = [
-    {
-      keywords: ['dolor', 'cabeza', 'migraña'],
-      response: "Para dolores de cabeza, es importante identificar si hay fiebre o problemas de visión. Podés probar descansando en un lugar oscuro. Si el dolor es el más fuerte que hayas tenido, te sugiero una consulta inmediata por telemedicina para evaluar medicación."
-    },
-    {
-      keywords: ['receta', 'medicamento', 'remedio'],
-      response: "¡Claro! Con nuestro sistema recibís la receta digital certificada directo en tu WhatsApp. Solo tenés que conectar con un médico mediante el link que te enviamos. ¿Querés que te explique cómo solicitar el turno?"
-    },
-    {
-      keywords: ['turno', 'atencion', 'especialista'],
-      response: "Solicitar un turno es simple: nos escribís por WhatsApp, te enviamos un link único y entrás desde la web. Sin apps. ¿Sos afiliado o paciente privado?"
-    },
-    {
-      keywords: ['fiebre', 'temperatura'],
-      response: "Si tenés más de 38°C, te recomendamos hidratación y control cada 6 horas. Si la fiebre no baja con métodos habituales o persiste más de 48hs, consultá con nuestros médicos online mediante el link de acceso rápido."
-    },
-    {
-      keywords: ['gratis', 'costo', 'pagar'],
-      response: "La orientación por este chat es 100% gratuita. Las consultas de telemedicina son gratis para afiliados y tienen un costo mínimo (bono) para pacientes privados. ¡Sin suscripciones costosas!"
-    },
-    {
-      keywords: ['estudio', 'analisis', 'orden'],
-      response: "Nuestros médicos pueden emitir órdenes para estudios de laboratorio o imágenes. Una vez realizada la consulta rápida, recibís el documento digital en tu celular de forma inmediata."
-    }
-  ];
-
-  function getAIResponse(input) {
-    const text = input.toLowerCase();
-    
-    // Buscar coincidencia en palabras clave
-    for (let item of medicalResponses) {
-      if (item.keywords.some(key => text.includes(key))) {
-        return item.response;
-      }
-    }
-    
-    // Respuesta genérica si no hay palabras clave
-    return "Entiendo tu inquietud. Como IA entrenada por médicos, te sugiero realizar una consulta breve por telemedicina para darte una respuesta precisa. Recordá que recibís tu receta o certificado por WhatsApp al instante. ¿Te gustaría saber cómo conectar con un profesional ahora?";
-  }
-
-  chatForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const text = userInput.value.trim();
-    if(!text) return;
-
-    appendMessage(text, 'user');
-    userInput.value = '';
-
-    // Efecto de carga
-    typingIndicator.style.display = 'block';
-    
-    setTimeout(() => {
-      typingIndicator.style.display = 'none';
-      const aiResponse = getAIResponse(text);
-      appendMessage(aiResponse, 'assistant');
-    }, 1200);
-  });
-
-  function appendMessage(text, side) {
-    const div = document.createElement('div');
-    div.className = `message ${side}`;
-    div.innerHTML = text; // Usamos innerHTML para permitir negritas en las respuestas
-    chatMessages.appendChild(div);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-  }
-</script>
-
-</body>
-</html>
+    return new Response("Not found", { status: 404 });
+  },
+};
