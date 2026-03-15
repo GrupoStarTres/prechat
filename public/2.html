@@ -1,1 +1,900 @@
-b
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Primaria Salud | Pitch Deck Telemedicina - Documento de Inversión</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body {
+            font-family: 'Montserrat', Arial, sans-serif;
+            background: #f5f5f5;
+            color: #234063;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 60px 50px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.08);
+        }
+        header {
+            text-align: center;
+            border-bottom: 3px solid #2154a3;
+            padding-bottom: 40px;
+            margin-bottom: 60px;
+        }
+        .logo-header {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+        }
+        h1 {
+            font-size: 2.8em;
+            color: #2154a3;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            font-size: 1.4em;
+            color: #78b33b;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .tagline {
+            font-size: 1.1em;
+            color: #666;
+            font-style: italic;
+        }
+        .section {
+            page-break-inside: avoid;
+            margin-bottom: 50px;
+        }
+        .section-number {
+            font-size: 3em;
+            color: #78b33b;
+            font-weight: 800;
+            opacity: 0.15;
+            position: absolute;
+            margin-left: -80px;
+            margin-top: -10px;
+        }
+        h2 {
+            font-size: 2em;
+            color: #2154a3;
+            border-left: 5px solid #78b33b;
+            padding-left: 20px;
+            margin-bottom: 25px;
+            margin-top: 15px;
+        }
+        h3 {
+            font-size: 1.5em;
+            color: #234063;
+            margin-top: 20px;
+            margin-bottom: 12px;
+            border-bottom: 2px solid #e7ecef;
+            padding-bottom: 8px;
+        }
+        p {
+            margin-bottom: 12px;
+            text-align: justify;
+            font-size: 1.05em;
+        }
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+        li {
+            margin-bottom: 8px;
+            font-size: 1.05em;
+        }
+        .highlight {
+            background: #e1eeff;
+            padding: 20px;
+            border-left: 4px solid #2154a3;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .warning {
+            background: #fffacd;
+            padding: 20px;
+            border-left: 4px solid #FFB200;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        th {
+            background: #2154a3;
+            color: #fff;
+            padding: 15px;
+            text-align: left;
+            font-weight: 700;
+        }
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e7ecef;
+        }
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        .currency {
+            color: #78b33b;
+            font-weight: bold;
+        }
+        .money {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+        .footer {
+            text-align: center;
+            border-top: 2px solid #e7ecef;
+            padding-top: 30px;
+            margin-top: 60px;
+            font-size: 0.95em;
+            color: #999;
+        }
+        .box-info {
+            background: #f7fafd;
+            border: 1px solid #2154a3;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        .roadmap-item {
+            display: flex;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 4px solid #78b33b;
+        }
+        .roadmap-item strong {
+            color: #2154a3;
+            min-width: 150px;
+        }
+        .metric {
+            display: inline-block;
+            background: #2154a3;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin: 3px;
+            font-weight: bold;
+            font-size: 0.95em;
+        }
+        @media print {
+            body { background: white; }
+            .container { box-shadow: none; padding: 40px; }
+        }
+        @media (max-width: 768px) {
+            .container { padding: 30px 20px; }
+            h1 { font-size: 2em; }
+            h2 { font-size: 1.5em; }
+            table { font-size: 0.9em; }
+            th, td { padding: 10px 8px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <header>
+            <svg class="logo-header" viewBox="0 0 108 108" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="54" cy="54" r="50" fill="#2154a3"/>
+                <rect x="44" y="23" width="20" height="63" rx="7" fill="#78b33b"/>
+                <rect x="23" y="44" width="63" height="20" rx="7" fill="#78b33b"/>
+                <circle cx="54" cy="54" r="19" fill="#fff" opacity=".95"/>
+                <circle cx="54" cy="54" r="12" fill="#78b33b" />
+            </svg>
+            <h1>PRIMARIA SALUD</h1>
+            <div class="subtitle">Plataforma de Telemedicina y Triage IA Entrenada por Médicos</div>
+            <div class="tagline">Documento de Inversión y Plan de Ejecución Técnico-Legal</div>
+        </header>
+
+        <!-- SECCIÓN 0: CONTEXTO -->
+        <div class="section">
+            <div class="section-number">0</div>
+            <h2>El Antecedente: Validación de Mercado y Activos Existentes</h2>
+            
+            <h3>Historia y Trayectoria (2018 - 2026)</h3>
+            <p>
+                <strong>Primaria Salud</strong> no nace como un proyecto de fin de semana. Proviene de 8 años de investigación, iteración y validación en el mercado de educación en salud y orientación médica digital en Argentina y Latinoamérica.
+            </p>
+            
+            <ul>
+                <li><strong>Fase 1 (2018-2022):</strong> Desarrollo de plataformas educativas en salud, construcción de comunidades verificadas de médicos y pacientes, análisis profundo del dolor del usuario.</li>
+                <li><strong>Fase 2 (2022-2024):</strong> Validación técnica de arquitectura WebRTC, pruebas de latencia <100ms en redes globales, integración de IA médica.</li>
+                <li><strong>Fase 3 (2024-2026):</strong> Consolidación del stack y diseño de la solución definitiva.</li>
+            </ul>
+
+            <div class="box-info">
+                <strong>Activos Iniciales Disponibles:</strong><br>
+                ✓ Base de datos de <strong>50,000+ contactos</strong> verificados (médicos, pacientes, educadores en salud)<br>
+                ✓ Comunidad validada en redes sociales con engagement real<br>
+                ✓ Arquitectura técnica diseñada y testada<br>
+                ✓ Stack open source consolidado
+            </div>
+        </div>
+
+        <!-- SECCIÓN 1: EL PROBLEMA -->
+        <div class="section">
+            <div class="section-number">1</div>
+            <h2>El Problema: La Crisis Actual de Telemedicina</h2>
+            
+            <h3>El Vacío del Mercado</h3>
+            <p>
+                Las soluciones actuales (Zoom, Google Meet, Skype) no fueron diseñadas para consultas médicas de alta calidad:
+            </p>
+            
+            <ul>
+                <li><strong>Latencia destructiva:</strong> >2.5 segundos. Imposible para diagnósticos en tiempo real o IA que requiera respuesta inmediata.</li>
+                <li><strong>Compresión audio/video:</strong> Pérdida de matices críticos (tonalidad de voz, síntomas visibles, datos dermatológicos).</li>
+                <li><strong>Falta de privacidad:</strong> Datos médicos almacenados en servidores multinacionales sin cumplimiento HIPAA/GDPR local.</li>
+                <li><strong>Costos ocultos:</strong> Plataformas caras, sin flexibilidad de pago para médicos en Latinoamérica.</li>
+                <li><strong>Experiencia fragmentada:</strong> Pacientes deben descargar apps, crear cuentas, recordar contraseñas. Fricción en el acceso.</li>
+            </ul>
+
+            <div class="highlight">
+                <strong>La Oportunidad Real:</strong> No existe una plataforma que ofrezca:<br>
+                • Latencia <100ms<br>
+                • Audio Hi-Fi (FLAC) + Video 4K<br>
+                • Cumplimiento normativo ARG/LATAM<br>
+                • Acceso web puro (sin app)<br>
+                • Costos operativos predecibles y justos
+            </div>
+        </div>
+
+        <!-- SECCIÓN 2: LA SOLUCIÓN -->
+        <div class="section">
+            <div class="section-number">2</div>
+            <h2>La Solución: Primaria Salud Telemedicina</h2>
+            
+            <h3>Arquitectura y Propuesta de Valor</h3>
+            <p>
+                <strong>Primaria Salud</strong> es una plataforma cloud-native construida sobre WebRTC optimizado + Cloudflare Calls backbone. Garantiza:
+            </p>
+
+            <div class="box-info">
+                <strong>Promesas Técnicas Verificables:</strong><br>
+                <span class="metric">Latencia <100ms</span><br>
+                <span class="metric">Audio FLAC Hi-Fi</span><br>
+                <span class="metric">Video 4K</span><br>
+                <span class="metric">0 descargas requeridas</span><br>
+                <span class="metric">100% GDPR/HIPAA Ready</span>
+            </div>
+
+            <h3>¿Cómo Funciona?</h3>
+            <ol>
+                <li><strong>Paciente:</strong> Ingresa número WhatsApp → recibe enlace de consulta → accede en navegador.</li>
+                <li><strong>Médico:</strong> Inicia sesión segura → atiende en video Hi-Fi + IA de triage como soporte.</li>
+                <li><strong>Recetas/Docs:</strong> Se envían automáticas a WhatsApp/email del paciente (certificados digitales).</li>
+                <li><strong>Chat IA:</strong> Disponible 24/7 para consultas iniciales gratis (triage), con opción de derivación médica inmediata.</li>
+            </ol>
+        </div>
+
+        <!-- SECCIÓN 3: STACK TECNOLÓGICO -->
+        <div class="section">
+            <div class="section-number">3</div>
+            <h2>Stack Tecnológico: 100% Open Source & Cloud Native</h2>
+            
+            <h3>Capas de Infraestructura</h3>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Capa</th>
+                        <th>Tecnología</th>
+                        <th>Función</th>
+                        <th>Ventaja</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Frontend</strong></td>
+                        <td>Next.js + React + HTML5/JS</td>
+                        <td>UI/UX interactivo</td>
+                        <td>Universalmente accesible (sin plugins)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Comunicación Real-Time</strong></td>
+                        <td>WebRTC + Cloudflare Calls</td>
+                        <td>Video/audio <100ms latencia</td>
+                        <td>Super peer global, escalable a millones</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Backend APIs</strong></td>
+                        <td>Node.js + Express</td>
+                        <td>Lógica de negocio</td>
+                        <td>Rápido, escalable, open source</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Serverless Logic</strong></td>
+                        <td>Cloudflare Workers</td>
+                        <td>Funciones de borde (edge)</td>
+                        <td>Costo zero si no se usa, latencia ultra-baja</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Base de Datos</strong></td>
+                        <td>MySQL en AWS RDS</td>
+                        <td>Almacenamiento relacional</td>
+                        <td>ACID, backups automáticos, cumplimiento</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Procesamiento Media</strong></td>
+                        <td>FFmpeg (FLAC/x264)</td>
+                        <td>Transcodificación audio/video</td>
+                        <td>Codec abierto, máxima calidad</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Storage</strong></td>
+                        <td>Cloudflare R2</td>
+                        <td>Archivos (recetas, certificados)</td>
+                        <td>S3-compatible, sin costos de egreso</td>
+                    </tr>
+                    <tr>
+                        <td><strong>IA Médica</strong></td>
+                        <td>LLaMA 3.1 en Workers AI</td>
+                        <td>Triage + orientación inicial</td>
+                        <td>Entrenamiento médico, respuesta <100ms</td>
+                    </tr>
+                    <tr>
+                        <td><strong>CDN Global</strong></td>
+                        <td>Cloudflare CDN</td>
+                        <td>Distribución de contenido</td>
+                        <td>Presencia en 200+ países</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="warning">
+                <strong>⚠️ Ventaja Competitiva Técnica:</strong><br>
+                Mientras competidores dependen de SaaS caros (Zoom $20-25/mes, Twilio $0.01-0.10/min), 
+                nosotros construimos sobre infraestructura pública en condiciones de "costo marginal cero". 
+                Con serverless, pagamos solo por lo que usamos. Si no hay consultas, no hay factura.
+            </div>
+        </div>
+
+        <!-- SECCIÓN 4: MODELO FINANCIERO -->
+        <div class="section">
+            <div class="section-number">4</div>
+            <h2>Modelo Financiero: Ingresos, Costos y Márgenes</h2>
+            
+            <h3>Estructura de Precios y Reparto</h3>
+            <p>
+                <strong>Precio al Paciente:</strong> $150 USD / consulta (equivalentes en ARS según mercado).
+            </p>
+
+            <h3>Cálculo Transparente del Reparto (FastSpring como Merchant of Record)</h3>
+            <div class="box-info">
+                <strong>Ejemplo con Comisión FastSpring 8.9%:</strong><br><br>
+                1. Paciente paga: <span class="money">$150</span><br>
+                2. FastSpring (8.9% + impuestos): <span class="money">−$13.35</span><br>
+                3. Transmisión + operativa: <span class="money">−$0.30</span><br>
+                4. Base para reparto: <span class="money">$136.35</span><br>
+                5. Plataforma Primaria (12%): <span class="money">$16.36</span><br>
+                6. <strong>Médico recibe (88%):</strong> <span class="money">$120.00</span><br>
+                <br>
+                <strong>Valor neto 48 horas:</strong> Vía PayPal o transferencia bancaria global.
+            </div>
+
+            <h3>Proyección de Ingresos</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mes</th>
+                        <th>Consultas/Mes</th>
+                        <th>Ingresos Brutos</th>
+                        <th>Costos (Payment + Tx)</th>
+                        <th>Base Reparto</th>
+                        <th>Retención Primaria (12%)</th>
+                        <th>Pago Médicos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>M1 (Beta)</strong></td>
+                        <td>200</td>
+                        <td class="money">$30,000</td>
+                        <td class="money">−$2,670</td>
+                        <td class="money">$27,330</td>
+                        <td class="money">$3,280</td>
+                        <td class="money">$24,050</td>
+                    </tr>
+                    <tr>
+                        <td><strong>M3</strong></td>
+                        <td>1,000</td>
+                        <td class="money">$150,000</td>
+                        <td class="money">−$13,350</td>
+                        <td class="money">$136,650</td>
+                        <td class="money">$16,398</td>
+                        <td class="money">$120,252</td>
+                    </tr>
+                    <tr>
+                        <td><strong>M6</strong></td>
+                        <td>5,000</td>
+                        <td class="money">$750,000</td>
+                        <td class="money">−$66,750</td>
+                        <td class="money">$683,250</td>
+                        <td class="money">$81,990</td>
+                        <td class="money">$601,260</td>
+                    </tr>
+                    <tr>
+                        <td><strong>M12</strong></td>
+                        <td>15,000</td>
+                        <td class="money">$2,250,000</td>
+                        <td class="money">−$200,250</td>
+                        <td class="money">$2,049,750</td>
+                        <td class="money">$245,970</td>
+                        <td class="money">$1,803,780</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Desglose de Costos Operativos (Mes Típico en M6+)</h3>
+            <ul>
+                <li><strong>Infraestructura (40%):</strong> AWS RDS, Cloudflare, compute. ~$3,280/mes.</li>
+                <li><strong>Team (35%):</strong> Desarrollador, Product Manager, DevOps. ~$2,870/mes (inicialmente, co-founder).</li>
+                <li><strong>Legal/Compliance (15%):</strong> Asesoría regulatoria Argentina/LATAM. ~$1,230/mes.</li>
+                <li><strong>Marketing (10%):</strong> Ads, content, partners médicos. ~$820/mes.</li>
+            </ul>
+
+            <p>
+                <strong>Margen Operativo Mes 6+:</strong> Retención de plataforma ($82k) menos costos ($8,200) = <span class="currency">$73,800/mes netos.</span>
+            </p>
+        </div>
+
+        <!-- SECCIÓN 5: ESTRUCTURA LEGAL Y CORPORATIVA -->
+        <div class="section">
+            <div class="section-number">5</div>
+            <h2>Estructura Legal y Corporativa</h2>
+            
+            <h3>Constitución y Protección del IP</h3>
+            <ul>
+                <li><strong>Jurisdicción:</strong> Delaware, USA (vía SFM o similar). Costo: $500-800 USD (APARTE de los fondos de inversión).</li>
+                <li><strong>Razón Social:</strong> Primaria Salud Inc.</li>
+                <li><strong>Estructura Accionaria:</strong> 50% Fundador-Desarrollador / 50% Inversor-Socio residente en USA.</li>
+            </ul>
+
+            <h3>Documentos Fundacionales Requeridos</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Documento</th>
+                        <th>Propósito</th>
+                        <th>Firmantes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Certificate of Incorporation</strong></td>
+                        <td>Constitución formal de la empresa</td>
+                        <td>Estado de Delaware</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Bylaws</strong></td>
+                        <td>Reglas internas de gobierno corporativo</td>
+                        <td>Junta Directiva</td>
+                    </tr>
+                    <tr>
+                        <td><strong>IP Assignment</strong></td>
+                        <td>Todo código, DB y activos pasan a Primaria Salud Inc.</td>
+                        <td>Fundador ↔ Empresa</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Stock Purchase Agreement</strong></td>
+                        <td>Inversor aporta $1,000 y recibe 50% de acciones</td>
+                        <td>Inversor ↔ Empresa</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Founders' Agreement</strong></td>
+                        <td>Código de conducta, vesting, buy-sell clauses</td>
+                        <td>Fundador + Inversor</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="box-info">
+                <strong>Ventaja del Socio Residente en USA:</strong><br>
+                ✓ Apertura de cuentas bancarias corporativas (SVB, Mercury, etc.)<br>
+                ✓ Relaciones directas con inversores Venture Capital<br>
+                ✓ Cumplimiento normativo USA-LATAM<br>
+                ✓ Facilita rondas futuras de financiación
+            </div>
+        </div>
+
+        <!-- SECCIÓN 6: PASARELA DE PAGO GLOBAL -->
+        <div class="section">
+            <div class="section-number">6</div>
+            <h2>Pasarela de Pago: Operación Global desde Día 1</h2>
+            
+            <h3>FastSpring vs. Paddle</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Criterio</th>
+                        <th>FastSpring</th>
+                        <th>Paddle</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Comisión</strong></td>
+                        <td>8.9% (negociable a 7% con volumen)</td>
+                        <td>5% + $0.50</td>
+                    </tr>
+                    <tr>
+                        <td><strong>MoR (Merchant of Record)</strong></td>
+                        <td>✓ Sí, 200+ países</td>
+                        <td>✓ Sí, 190+ países</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Soporte LATAM</strong></td>
+                        <td>✓ Excelente, oficina LatAm</td>
+                        <td>✓ Bueno, pero secundario</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Chargebacks</strong></td>
+                        <td>Asumidos por FastSpring</td>
+                        <td>Asumidos por Paddle</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Método de Pago</strong></td>
+                        <td>Tarjetas, PayPal, transferencias locales</td>
+                        <td>Tarjetas, PayPal, Apple Pay, Google Pay</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Recomendación: FastSpring</h3>
+            <p>
+                FastSpring como Merchant of Record. Razones:
+            </p>
+            <ul>
+                <li>Presencia fuerte en Latinoamérica (soporte en español).</li>
+                <li>Comisión negociable a medida que crezca volumen.</li>
+                <li>Maneja IVA/VAT automáticamente en todos los países.</li>
+                <li>Integración directa con sistemas de pago locales (transferencias bancarias, billeteras digitales).</li>
+            </ul>
+
+            <div class="highlight">
+                <strong>Beneficio Clave:</strong> No necesitamos asesoría fiscal en 40 países. FastSpring maneja todo. 
+                El 2-3% extra de comisión es infinitamente más barato que contratar bufetes legales locales.
+            </div>
+        </div>
+
+        <!-- SECCIÓN 7: PLAN DE INVERSIÓN -->
+        <div class="section">
+            <div class="section-number">7</div>
+            <h2>Plan de Inversión: El Propósito de los $1,000</h2>
+            
+            <h3>Capital Solicitado: $1,000 USD</h3>
+            <p>
+                Este capital es para <strong>ejecutar</strong>, no para "ideología". Objetivo: 
+                <strong>Poner en marcha la infraestructura y lanzar una Beta Privada Funcional</strong> con usuarios reales de la comunidad Primaria Salud.
+            </p>
+
+            <h3>Desglose del Gasto</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Concepto</th>
+                        <th>Monto</th>
+                        <th>% Total</th>
+                        <th>Detalle</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Infraestructura Nube</strong></td>
+                        <td class="money">$500</td>
+                        <td>50%</td>
+                        <td>Créditos AWS, Cloudflare, configuración base, dominios, SSL.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Herramientas Dev/Team</strong></td>
+                        <td class="money">$300</td>
+                        <td>30%</td>
+                        <td>GitHub Pro, Slack, Figma, herramientas de monitoreo (Sentry, DataDog).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Marketing Beta</strong></td>
+                        <td class="money">$200</td>
+                        <td>20%</td>
+                        <td>Email masivo a base de 50k (MailChimp), ads iniciales, creatividades.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="warning">
+                <strong>Aclaración Importante:</strong><br>
+                Los $1,000 son SOLO para deployment y operativa inicial. 
+                El costo de constitución en Delaware ($500-800) es APARTE y corre por cuenta del inversor o se negocia como costo pre-cierre.
+            </div>
+
+            <h3>¿Quién Aporta Qué?</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Participante</th>
+                        <th>Aporte Financiero</th>
+                        <th>Aporte No Financiero</th>
+                        <th>Equity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Fundador-Dev</strong></td>
+                        <td>$0 (por ahora)</td>
+                        <td>8 años de R&D, base 50k, arquitectura, desarrollo full-time</td>
+                        <td>50%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Inversor-Socio USA</strong></td>
+                        <td class="money">$1,000 + $500-800 Delaware</td>
+                        <td>Residencia USA, networking VC, banking, compliance EEUU</td>
+                        <td>50%</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>
+                <strong>Ausencia de Salario Inicial:</strong> El fundador asume riesgo total a cambio de equity. 
+                Los $1,000 son capital operativo, no remuneración. El primer salario comienza cuando la plataforma genera ingresos (mes 3-4 de operación).
+            </p>
+        </div>
+
+        <!-- SECCIÓN 8: ROADMAP DE EJECUCIÓN -->
+        <div class="section">
+            <div class="section-number">8</div>
+            <h2>Roadmap de Ejecución: 8 Semanas a Beta Privada</h2>
+            
+            <h3>Fase I: Semana 1-2 (Legal y Fundamentos)</h3>
+            <div class="roadmap-item">
+                <strong>Week 1:</strong> Contacto con SFM (Delaware incorporation). Firma de SPA (Stock Purchase Agreement). 
+                Apertura de cuenta bancaria corporativa con socios en EEUU.
+            </div>
+            <div class="roadmap-item">
+                <strong>Week 2:</strong> IP Assignment finalizado. Founders' Agreement en vigor. 
+                Setup de Primaria Salud Inc. en sistemas de contabilidad (QuickBooks, Fyle).
+            </div>
+
+            <h3>Fase II: Semana 3-4 (Infraestructura - Con los $1,000)</h3>
+            <div class="roadmap-item">
+                <strong>Week 3:</strong> Deployment de backend en Cloudflare Workers. Setup de MySQL en AWS RDS. 
+                Configuración de R2 (storage). Frontend base en Vercel.
+            </div>
+            <div class="roadmap-item">
+                <strong>Week 4:</strong> Integración WebRTC. Tests de latencia local. Setup de FastSpring Merchant Account. 
+                Configuración de WhatsApp Business API (para notificaciones).
+            </div>
+
+            <h3>Fase III: Semana 5-6 (Desarrollo IA + Audio)</h3>
+            <div class="roadmap-item">
+                <strong>Week 5:</strong> Entrenamiento del modelo LLaMA 3.1 con datasets médicos argentinos. 
+                Integración con Workers AI. Tests de respuesta en tiempo real.
+            </div>
+            <div class="roadmap-item">
+                <strong>Week 6:</strong> Implementación de transcodificación FLAC/x264 vía FFmpeg. 
+                Tests de calidad de audio en diferentes bandas de ancho. Optimización.
+            </div>
+
+            <h3>Fase IV: Semana 7-8 (Beta Privada y Community Activation)</h3>
+            <div class="roadmap-item">
+                <strong>Week 7:</strong> QA completo de toda la plataforma. Seguridad (SSL, OAuth2, rate limiting). 
+                Preparación de documentación para usuarios beta.
+            </div>
+            <div class="roadmap-item">
+                <strong>Week 8:</strong> Envío de email masivo a 50,000 contactos. Invitación a 200 médicos y pacientes seleccionados. 
+                Launch de Beta Privada. Recolección de feedback y métricas.
+            </div>
+
+            <h3>Métricas Clave de Beta (Semana 8+)</h3>
+            <div class="box-info">
+                <span class="metric">Latencia Promedio <80ms</span>
+                <span class="metric">Satisfacción Usuarios >4.8/5</span>
+                <span class="metric">Uptime >99.5%</span>
+                <span class="metric">200+ usuarios activos</span>
+                <span class="metric">Tasa Conversión Chat→Consulta >25%</span>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 9: JUSTIFICACIÓN TÉCNICA -->
+        <div class="section">
+            <div class="section-number">9</div>
+            <h2>Justificación Técnica: Por Qué Funciona a Escala</h2>
+            
+            <h3>¿Puede Cloudflare Calls soportar 10,000+ usuarios concurrentes?</h3>
+            <p>
+                <strong>Sí.</strong> Cloudflare Calls está diseñado como un "super peer" global. 
+                Cada usuario se conecta al data center más cercano (hay 200+ en todo el mundo), 
+                no a un servidor central. Esto significa:
+            </p>
+            <ul>
+                <li>Latencia garantizada <20ms entre un usuario y su peer más cercano.</li>
+                <li>Escalabilidad horizontal automática (no hay cuello de botella central).</li>
+                <li>Manejo automático de picos de tráfico sin intervención humana.</li>
+            </ul>
+
+            <h3>¿Por Qué FastSpring en Lugar de Stripe?</h3>
+            <p>
+                Stripe es excelente, pero requiere setup fiscal en cada jurisdicción donde operamos. 
+                FastSpring, como Merchant of Record, gestiona todo. En 3 países con diferentes tasas IVA/VAT, 
+                esto nos ahorra $5,000-10,000 en asesoría legal y compliance. El 2-3% extra de comisión es un ahorro neto.
+            </p>
+
+            <h3>¿Por Qué Next.js en Vercel?</h3>
+            <p>
+                Next.js nos permite full-stack JavaScript (frontend + backend). 
+                Vercel auto-escala, auto-redeploy, y está optimizado para dinámico. 
+                Con Cloudflare Workers en el "borde" para lógica crítica, obtenemos latencia global <50ms incluso en picos.
+            </p>
+
+            <h3>¿Por Qué Open Source y No SaaS?</h3>
+            <p>
+                Control total, sin vendor lock-in, costos predecibles y escalables. 
+                Con Docker, podemos replicar la arquitectura en cualquier proveedor si algo falla. 
+                Además, el stack es tan estándar que es fácil contratar developers (reduce riesgo de retención de talento).
+            </p>
+        </div>
+
+        <!-- SECCIÓN 10: RIESGOS Y MITIGACIONES -->
+        <div class="section">
+            <div class="section-number">10</div>
+            <h2>Riesgos y Mitigaciones</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Riesgo</th>
+                        <th>Probabilidad</th>
+                        <th>Mitigación</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Regulación Médica Cambia</strong></td>
+                        <td>Media</td>
+                        <td>Asesoría legal local desde semana 1. Comités de compliance con médicos.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Competidor con Más Fondos</strong></td>
+                        <td>Media-Alta</td>
+                        <td>Movernos rápido (beta en 8 semanas), bloquear médicos líderes, network effects.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Falla Técnica en Prod</strong></td>
+                        <td>Baja</td>
+                        <td>Multi-region redundancy, automated failover, monitoring 24/7 (Sentry).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Baja Adopción Médicos</strong></td>
+                        <td>Baja</td>
+                        <td>50k base + comunidad validada. Pilotos remunerados con doctores líderes.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Costos Más Altos que lo Proyectado</strong></td>
+                        <td>Baja</td>
+                        <td>Presupuesto con 30% buffer. Serverless = costos variables, no fijos.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- SECCIÓN 11: PROYECCIÓN 18 MESES -->
+        <div class="section">
+            <div class="section-number">11</div>
+            <h2>Proyección 18 Meses: De Beta a Ronda Seed</h2>
+            
+            <h3>Hitos Esperados</h3>
+            <div class="roadmap-item">
+                <strong>Mes 1-2:</strong> Beta privada con 200 usuarios. Refinamiento basado en feedback.
+            </div>
+            <div class="roadmap-item">
+                <strong>Mes 3-4:</strong> Launch público (Argentina). 1,000-2,000 usuarios. Primeros ingresos reales.
+            </div>
+            <div class="roadmap-item">
+                <strong>Mes 6:</strong> Expansión a Chile + Colombia. 5,000 usuarios. $81,990 MRR netos (Primaria).
+            </div>
+            <div class="roadmap-item">
+                <strong>Mes 12:</strong> Presencia LATAM full. 15,000+ usuarios. $245,970 MRR netos. Datos sólidos para Seed.
+            </div>
+            <div class="roadmap-item">
+                <strong>Mes 18:</strong> Ronda Seed. Objetivo: $2-3M USD. Validación de modelo, expansión a USA.
+            </div>
+
+            <h3>Métricas para Seed Round</h3>
+            <div class="box-info">
+                • ARR (Annual Recurring Revenue): >$3M<br>
+                • NPS (Net Promoter Score): >70<br>
+                • CAC (Customer Acquisition Cost): <$100<br>
+                • LTV (Lifetime Value): >$2,000<br>
+                • Churn Rate: <5% mensual<br>
+                • Equipo: 10+ personas
+            </div>
+        </div>
+
+        <!-- SECCIÓN 12: CIERRE Y LLAMADO A ACCIÓN -->
+        <div class="section">
+            <div class="section-number">12</div>
+            <h2>Resumen Ejecutivo para Inversores</h2>
+            
+            <div class="highlight">
+                <h3>¿Por Qué Invertir en Primaria Salud?</h3>
+                <ul>
+                    <li><strong>Mercado Enorme:</strong> Telemedicina LATAM crece 35% YoY. Demanda real y urgente.</li>
+                    <li><strong>Equipo Validado:</strong> 8 años de R&D, base de 50,000 contactos, arquitectura probada.</li>
+                    <li><strong>Tecnología Diferenciada:</strong> Latencia <100ms + Audio Hi-Fi. Nadie más lo ofrece.</li>
+                    <li><strong>Unit Economics Sólidos:</strong> Margen de 12% retención en plataforma con costos variables ultra-bajos.</li>
+                    <li><strong>Go-to-Market Validado:</strong> Comunidad de médicos y pacientes listos. No es especulativo.</li>
+                    <li><strong>Blindaje Legal:</strong> Estructura Delaware + IP securing desde día 1.</li>
+                    <li><strong>Socio en USA:</strong> Ventaja para relaciones VC y banking global.</li>
+                </ul>
+            </div>
+
+            <h3>Propuesta de Inversión</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Concepto</th>
+                        <th>Detalle</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Capital Solicitado</strong></td>
+                        <td class="money">$1,000 USD</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Equity Ofrecido</strong></td>
+                        <td>50% de Primaria Salud Inc. (Delaware)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Uso de Fondos</strong></td>
+                        <td>Deployment Beta en 8 semanas</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Timeline a Seed</strong></td>
+                        <td>18 meses (datos validados, >15k usuarios)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ROI Esperado</strong></td>
+                        <td>5-10x en 3 años (conservador)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Próximos Pasos</h3>
+            <ol>
+                <li>Conversación exploratoria (30 min). Preguntas técnicas, legales, de negocio.</li>
+                <li>Due Diligence: Acceso a código, documentación, base de datos (bajo NDA).</li>
+                <li>Term Sheet: Condiciones, protecciones, calendario.</li>
+                <li>Cierre Legal: Stock Purchase Agreement, fundación en Delaware.</li>
+                <li>Inicio de Operaciones: Despliegue de infraestructura y launch de Beta.</li>
+            </ol>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <hr>
+            <p>
+                <strong>Primaria Salud | Telemedicina & Triage IA</strong><br>
+                Documento de Inversión - Confidencial<br>
+                Versión 1.0 | 2026<br>
+                
+            </p>
+            <p style="font-size: 0.9em; margin-top: 20px;">
+                Disclaimer: Este documento es un resumen ejecutivo con propósitos informativos. 
+                No constituye una oferta vinculante. Todas las proyecciones financieras son estimaciones 
+                basadas en datos históricos y supuestos de mercado sujetos a cambio.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
